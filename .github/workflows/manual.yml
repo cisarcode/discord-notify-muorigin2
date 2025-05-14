@@ -14,8 +14,8 @@ jobs:
     steps:
       - run: |
           node - <<'JS'
-          import { request } from 'undici'
-          await request(process.env.DISCORD_WEBHOOK, {
+          const fetch = global.fetch // Node 20 trae fetch
+          await fetch(process.env.DISCORD_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type':'application/json' },
             body: JSON.stringify({ content: process.env.MENSAJE })
