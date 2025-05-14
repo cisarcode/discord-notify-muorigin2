@@ -1,26 +1,26 @@
-// /scripts/send.js
 import fs from 'node:fs/promises'
 
-const TZ = 'America/Asuncion'
-const now = new Intl.DateTimeFormat('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: TZ
-}).format(new Date()) // "18:30"
+const TZ_PAR = 'America/Asuncion'
+const offsetH = Number(process.env.OFFSET_H || 0) // -1, -2, …
 
-const hook = process.env.DISCORD_WEBHOOK
-if (!hook) throw new Error('DISCORD_WEBHOOK missing')
+const nowPar = new Date()
+
+// hora Paraguay → sumar desfase → hora server
+const serverMs = nowPar.getTime() + offsetH * 3_600_000
+const serverDate = new Date(serverMs)
+
+// strings server-time
+const hhmm = serverDate.toISOString().slice(11, 16).replace(':', '-') // '18-20'
+const day = serverDate.toLocaleDateString('en-US',
+    { weekday: 'short', timeZone: 'UTC' }).toLowerCase().slice(0, 3) // 'mon'
 
 try {
-    const file = new URL(`../mensajes/${now.replace(':', '-')}.md`, import.meta.url)
-    const content = await fs.readFile(file, 'utf8')
-
-    await fetch(hook, {
+    const txt = await fs.readFile(
+        new URL(`../mensajes/${day}-${hhmm}.md`, import.meta.url), 'utf8'
+    )
+    await fetch(process.env.DISCORD_WEBHOOK, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: content.trim() })
+        body: JSON.stringify({ content: txt.trim() })
     })
-} catch {
-    process.exit(0) // sin mensaje → salida limpia
-}
+} catch { /* sin mensaje */ }
