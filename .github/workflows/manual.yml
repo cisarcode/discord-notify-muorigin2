@@ -12,15 +12,12 @@ jobs:
   send:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          node - <<'JS'
-          const fetch = global.fetch // Node 20 trae fetch
-          await fetch(process.env.DISCORD_WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify({ content: process.env.MENSAJE })
-          })
-JS
+      - name: Enviar a Discord
+        run: |
+          curl -s -X POST \
+               -H "Content-Type: application/json" \
+               -d "{\"content\":\"${MENSAJE}\"}" \
+               "$DISCORD_WEBHOOK"
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          MENSAJE:            ${{ github.event.inputs.texto }}
+          MENSAJE: ${{ github.event.inputs.texto }}
