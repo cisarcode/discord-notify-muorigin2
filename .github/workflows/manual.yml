@@ -1,0 +1,26 @@
+name: disparo-manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      texto:
+        description: 'Mensaje completo (puede incluir @menciones)'
+        required: true
+        type: string
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          node - <<'JS'
+          import { request } from 'undici'
+          await request(process.env.HOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: process.env.MSG })
+          })
+JS
+        env:
+          HOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          MSG:  ${{ github.event.inputs.texto }}

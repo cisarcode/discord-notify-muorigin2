@@ -1,0 +1,26 @@
+name: notificaciones-fijas
+
+on:
+  schedule:
+    # 16:00-21:15 America/Asuncion → UTC+3
+    - cron: '0 19   * * *'   # 16:00 local
+    - cron: '0 20   * * *'   # 17:00 local
+    - cron: '30 21  * * *'   # 18:30 local
+    - cron: '0 22   * * *'   # 19:00 local
+    - cron: '0 23   * * *'   # 20:00 local
+    - cron: '15 0   * * *'   # 21:15 local
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Asuncion
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/send.js
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
