@@ -15,12 +15,12 @@ jobs:
       - run: |
           node - <<'JS'
           import { request } from 'undici'
-          await request(process.env.HOOK, {
+          await request(process.env.DISCORD_WEBHOOK, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: process.env.MSG })
+            headers: { 'Content-Type':'application/json' },
+            body: JSON.stringify({ content: process.env.MENSAJE })
           })
 JS
         env:
-          HOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          MSG:  ${{ github.event.inputs.texto }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          MENSAJE:            ${{ github.event.inputs.texto }}
