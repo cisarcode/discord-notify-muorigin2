@@ -1,14 +1,32 @@
-name: avisos-cada-5-min
+name: avisos-exactos
 
 on:
   schedule:
-    - cron: '*/5 * * * *'     # cada 5 min UTC
+    # Eventos Diarios
+    - cron: '50 14 * * *'   # 14:50 server
+    - cron: '50 15 * * *'
+    - cron: '50 17 * * *'
+    - cron: '20 18 * * *'
+    - cron: '50 18 * * *'
+    - cron: '50 19 * * *'
+    - cron: '20 20 * * *'
+    - cron: '50 20 * * *'
+    - cron: '20 21 * * *'
+    - cron: '20 22 * * *'
+    # Eventos Mensuales
+    - cron: '45 19 21 * *'   # 19:45 server, día 21 de cada mes
+  workflow_dispatch:
+
+concurrency:
+  group: avisos
+  cancel-in-progress: true
+
 jobs:
   send:
     runs-on: ubuntu-latest
-    env: { TZ: America/Asuncion }
     steps:
       - uses: actions/checkout@v4
       - run: node scripts/send.js
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          OFFSET_H:        ${{ vars.OFFSET_H }}

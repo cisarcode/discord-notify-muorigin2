@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 DIR="$(cd "$(dirname "$0")/../mensajes" && pwd)"
+rm -f "\${DIR}"/*.md
 
-# limpiar carpeta
-rm -f "${DIR}"/*.md
-
-# array: dow hh:mm mensaje
 while IFS='|' read -r dow hm text; do
-  fn="${DIR}/${dow}-${hm/:/-}.md"
-  echo "$text" > "$fn"
-done <<'TABLE'
+  fn="\${DIR}/\${dow}-\${hm//:/-}.md"
+  echo "\$text" > "\$fn"
+done << 'TABLE'
 mon|14:50|@everyone Lost City (World) – prepárense para entrar.
 mon|18:20|@everyone Phantom Monastery abre en 10 min.
 mon|19:50|@everyone Hoguera diario – reúnanse.

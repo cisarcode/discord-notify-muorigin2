@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       texto:
-        description: 'Mensaje completo (puede incluir @menciones)'
+        description: 'Mensaje (incluye @menciones)'
         required: true
         type: string
 
@@ -12,7 +12,7 @@ jobs:
   send:
     runs-on: ubuntu-latest
     steps:
-      - name: Enviar a Discord
+      - name: enviar
         run: |
           curl -s -X POST \
                -H "Content-Type: application/json" \
@@ -20,4 +20,4 @@ jobs:
                "$DISCORD_WEBHOOK"
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          MENSAJE: ${{ github.event.inputs.texto }}
+          MENSAJE:         ${{ github.event.inputs.texto }}

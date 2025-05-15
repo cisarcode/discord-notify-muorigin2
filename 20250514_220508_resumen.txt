@@ -1,0 +1,247 @@
+./
+├── $fn
+├── .DS_Store
+├── .github/
+│   └── workflows/
+│       ├── manual.yml
+│       └── notify.yml
+├── 20250514_220508_resumen.txt
+├── mensajes/
+│   ├── fri-17-50.md
+│   ├── fri-19-50.md
+│   ├── fri-20-20.md
+│   ├── fri-21-20.md
+│   ├── fri-22-20.md
+│   ├── mon-14-50.md
+│   ├── mon-18-20.md
+│   ├── mon-19-50.md
+│   ├── mon-20-20.md
+│   ├── mon-20-50.md
+│   ├── mon-21-20.md
+│   ├── sat-15-50.md
+│   ├── sat-17-50.md
+│   ├── sat-19-50.md
+│   ├── sat-20-20.md
+│   ├── sun-13-20.md
+│   ├── sun-15-50.md
+│   ├── sun-17-50.md
+│   ├── sun-19-50.md
+│   ├── sun-21-20.md
+│   ├── sun-22-20.md
+│   ├── thu-14-50.md
+│   ├── thu-15-50.md
+│   ├── thu-17-50.md
+│   ├── thu-18-50.md
+│   ├── thu-19-50.md
+│   ├── thu-20-20.md
+│   ├── thu-20-50.md
+│   ├── thu-21-20.md
+│   ├── tue-13-20.md
+│   ├── tue-17-50.md
+│   ├── tue-19-50.md
+│   ├── tue-20-20.md
+│   ├── tue-20-50.md
+│   ├── tue-21-20.md
+│   ├── wed-14-50.md
+│   ├── wed-17-50.md
+│   ├── wed-19-50.md
+│   ├── wed-20-20.md
+│   └── wed-21-20.md
+├── package.json
+└── scripts/
+    ├── build_messages.sh*
+    └── send.js
+
+5 directories, 48 files
+
+
+===== Contenido de Archivos =====
+
+==== package.json ====
+{ "type": "module" }
+
+
+==== scripts/send.js ====
+import fs from 'node:fs/promises'
+
+const offsetH = Number(process.env.OFFSET_H || -1)    // servidor->PY
+const parNow = new Date()
+const srvDate = new Date(parNow.getTime() + offsetH * 3_600_000)
+
+const hh = String(srvDate.getHours()).padStart(2, '0')
+const mm = String(srvDate.getMinutes()).padStart(2, '0')
+const dow = srvDate.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' })
+    .slice(0, 3).toLowerCase()
+
+try {
+    const txt = await fs.readFile(
+        new URL(`../mensajes/${dow}-${hh}-${mm}.md`, import.meta.url), 'utf8'
+    )
+    await fetch(process.env.DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: txt.trim() })
+    })
+} catch { /* no hay mensaje para esta marca → terminar OK */ }
+
+
+==== mensajes/tue-20-20.md ====
+@everyone Mu Ball inicia en 10 min.
+
+
+==== mensajes/wed-20-20.md ====
+@everyone Lost City (Abbys) – 10 min.
+
+
+==== mensajes/thu-20-20.md ====
+@everyone Treasure Fayrland abre en 10 min.
+
+
+==== mensajes/wed-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/thu-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/tue-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/sat-15-50.md ====
+@everyone 3 vs 3 inicia en 10 min.
+
+
+==== mensajes/thu-20-50.md ====
+@everyone Lost Tower (Abbys) – 10 min.
+
+
+==== mensajes/tue-20-50.md ====
+@everyone Lost Tower (World) abre en 10 min.
+
+
+==== mensajes/sun-21-20.md ====
+@everyone Roland City War (Asedio World) en 10 min.
+
+
+==== mensajes/sat-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
+==== mensajes/thu-18-50.md ====
+@everyone Kubera Mine fase 3 – 10 min.
+
+
+==== mensajes/mon-14-50.md ====
+@everyone Lost City (World) – prepárense para entrar.
+
+
+==== mensajes/tue-21-20.md ====
+@everyone Babel empieza en 10 min.
+
+
+==== mensajes/thu-21-20.md ====
+@everyone Babel empieza en 10 min.
+
+
+==== mensajes/wed-21-20.md ====
+@everyone Roland City War (Asedio Abbys) inicia en 10 min.
+
+
+==== mensajes/fri-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
+==== mensajes/sun-22-20.md ====
+@everyone Element Competition – 10 min.
+
+
+==== mensajes/sun-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/sun-15-50.md ====
+@everyone Element Competition – 10 min.
+
+
+==== mensajes/sun-13-20.md ====
+@everyone Mu Stadium abre en 10 min.
+
+
+==== mensajes/mon-18-20.md ====
+@everyone Phantom Monastery abre en 10 min.
+
+
+==== mensajes/sun-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
+==== mensajes/fri-20-20.md ====
+@everyone Dragon Fort (GVG mundo) – 10 min.
+
+
+==== mensajes/mon-21-20.md ====
+@everyone Abbys Domination en 10 min.
+
+
+==== mensajes/fri-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/fri-22-20.md ====
+@everyone Element Fayrland abre en 10 min.
+
+
+==== mensajes/thu-14-50.md ====
+@everyone Kubera Mine fase 1 – 10 min.
+
+
+==== mensajes/wed-14-50.md ====
+@everyone Lost City (Abbys) – 10 min.
+
+
+==== mensajes/sat-20-20.md ====
+@everyone Dragon Fort (GVG abbys) – 10 min.
+
+
+==== mensajes/sat-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/mon-20-50.md ====
+@everyone Demon Realm (Abbys) abre en 10 min.
+
+
+==== mensajes/tue-13-20.md ====
+@everyone Phantom Monastery – 10 min.
+
+
+==== mensajes/mon-19-50.md ====
+@everyone Hoguera diario – reúnanse.
+
+
+==== mensajes/thu-15-50.md ====
+@everyone Kubera Mine fase 2 – 10 min.
+
+
+==== mensajes/mon-20-20.md ====
+@everyone Lost City (World) inicia en 10 min.
+
+
+==== mensajes/tue-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
+==== mensajes/fri-21-20.md ====
+@everyone Abbys Domination en 10 min.
+
+
+==== mensajes/wed-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
+==== mensajes/thu-17-50.md ====
+@everyone Lilith aparecerá en 10 min.
+
+
