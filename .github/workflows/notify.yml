@@ -15,6 +15,7 @@ on:
     - cron: '20 22 * * *'
     # Eventos Mensuales
     - cron: '45 19 21 * *'   # 19:45 server, día 21 de cada mes
+    - cron: '30 21 * * *' #prueba
   workflow_dispatch:
 
 concurrency:
